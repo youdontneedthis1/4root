@@ -1,0 +1,28 @@
+version: "3.4"
+services:
+  app:
+    container_name: 'ruby_web'
+    #Image purpose - Web server listening on port 4567 for HTTP request. Respond with JSON
+    # AutoRun: WEBrick 1.4.2, ruby 2.5.1 (/app)
+    #Expected output - 
+      # {
+      #   id: UUID,
+      #   unix_stamp: int
+      # }
+    image: rootdevs/reliability-interview-container:201805
+
+    #Because we haven't assigned/created any networks for external resources and I am unsure if DHCP
+    #be available to the device I am deploying to, I am choosing bridge as it's a guaranteed routable IP.
+    #Realistically this can be anything that is routable or it can join an existing network.
+    network_mode: bridge
+    ports: 
+      - "4567:4567"
+
+    #Deploy is unused in compose structure however we are specifying here incase we deploy to swarm
+    deploy:
+      #Restart Policy - restart on any exit. Wait 5 seconds and retry 5 times within 60 seconds
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 60s
