@@ -18,7 +18,7 @@
         - gnupg-agent
         - software-properties-common
        state: latest
-       become: yes
+      become: yes
     - name: Add GPG Key
       apt_key:
        url: https://download.docker.com/linux/ubuntu/gpg
