@@ -5,43 +5,42 @@
   become: true
 
   tasks:
-   - name: Perform Updates
-     apt:
-      upgrade: yes
-      update_cache: yes
-   - name: Install Pre-reqs
-     apt:
-      name:
-       - apt-transport-https
-       - ca-certificates
-       - curl
-       - gnupg-agent
-       - software-properties-common
-       - python3
-      state: latest
+    - name: Perform Updates
+      apt:
+       upgrade: yes
+       update_cache: yes
+    - name: Install Pre-reqs
+      apt:
+       name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+        - python3
+       state: latest
 
-    # - name: Add GPG Key
-    #   apt_key:
-    #    url: https://download.docker.com/linux/ubuntu/gpg
-    #    state: present
-    #   become: yes
+    - name: Install Docker
+      apt:
+       name:
+        - docker.io
+        - docker-compose
 
-    # - name: Add Docker Repository
-    #   apt_repository:
-    #    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu/dists/focal $(lsb_release -cs) stable"
-    #    state: present
-    #   become: yes
+    - name: Create Docker files/environment
+      shell: |
+       mkdir /Docker/
+       cd /Docker/
+       git clone https://github.com/youdontneedthis1/4root.git
+       docker-compose up
 
-   - name: Install Docker
-     apt:
-      name:
-       - docker.io
-       - docker-compose
+# - name: Add GPG Key
+#   apt_key:
+#    url: https://download.docker.com/linux/ubuntu/gpg
+#    state: present
+#   become: yes
 
-   - name: Create Docker files/environment
-     shell: |
-      mkdir /Docker/
-      cd /Docker/
-      git clone https://github.com/youdontneedthis1/4root.git
-      docker-compose up
-
+# - name: Add Docker Repository
+#   apt_repository:
+#    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu/dists/focal $(lsb_release -cs) stable"
+#    state: present
+#   become: yes
