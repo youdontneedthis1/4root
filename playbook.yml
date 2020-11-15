@@ -1,0 +1,39 @@
+---
+-name: WebServer Deployments
+  hosts: <enter ansible client hostname/IP>
+  remote_user: <remote user account>
+	
+  tasks:
+    - name: Perform Updates
+       apt:
+        upgrade: yes
+        update_cache: yes
+    - name: Install Pre-reqs
+			apt:
+				name:
+					- apt-transport-https
+					- ca-certificates
+					- curl
+					- gnupng-agent
+					- software-properties-common
+				state: latest
+		- name: Add GPG Key
+			apt_key:
+				url: https://download.docker.com/linux/ubuntu/gpg
+				state: present
+				
+		- name: Add Docker Repository
+			apt_repository:
+				repo: deb https://download.docker.com/linux/ubuntu/gpg 
+				state: present
+				
+		-name: Install Docker
+			apt:
+				name:
+					- docker
+					- docker-compose
+
+		-name: Create Docker files/environment
+      shell: |
+       mkdir /Docker/
+       git clone https://github.com/youdontneedthis1/4root.git
