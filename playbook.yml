@@ -1,14 +1,21 @@
 ---
 - name: WebServer Deployments
+  #Provide Scope here - avoid use of 'all'.
   hosts: ansibleclient
   remote_user: ansibleclient
+  #Allow for escalation through-out playbook. If needed this could be trimmed back
+  #To only required operations.
   become: true
 
   tasks:
+    #Runs apt-get install upgrade to catch any packages needing update
     - name: Perform Updates
       apt:
        upgrade: yes
        update_cache: yes
+    
+    #Recommended Pre-Reqs
+    #https://docs.docker.com/engine/install/ubuntu/
     - name: Install Pre-reqs
       apt:
        name:
@@ -20,27 +27,22 @@
         - python3
        state: latest
 
+    #We are using Ubuntu repackage of Docker because of installation requirements
+    #Docker.io is the Ubuntu package
     - name: Install Docker
       apt:
        name:
         - docker.io
         - docker-compose
 
+    #Pull copy of git project and start docker
+    #Once compose is done, set the restart policy and cleanup.
     - name: Create Docker files/environment
+      git:
+        repo: 'https://github.com/youdontneedthis1/4root.git'
       shell: |
-       mkdir /Docker/
-       cd /Docker/
-       git clone https://github.com/youdontneedthis1/4root.git
-       docker-compose up
-
-# - name: Add GPG Key
-#   apt_key:
-#    url: https://download.docker.com/linux/ubuntu/gpg
-#    state: present
-#   become: yes
-
-# - name: Add Docker Repository
-#   apt_repository:
-#    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu/dists/focal $(lsb_release -cs) stable"
-#    state: present
-#   become: yes
+       docker-compose up -f /Docker/docker-compose.yml -p RootDevs
+       docker update --restart unless-stopped ruby_web
+      file:
+        path: ./playbook.yml
+        state: absent
