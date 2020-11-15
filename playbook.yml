@@ -8,6 +8,7 @@
       apt:
        upgrade: yes
        update_cache: yes
+      become: yes
     - name: Install Pre-reqs
       apt:
        name:
