@@ -44,8 +44,8 @@
     #doesn't apply. See - https://docs.docker.com/compose/compose-file/#deploy
     - name: Launch Docker
         shell: |
-         docker-compose up -f /Docker/docker-compose.yml -p RootDevs
-         docker update --restart unless-stopped ruby_web
+          docker-compose up -f /Docker/docker-compose.yml -p RootDevs
+          docker update --restart unless-stopped ruby_web
 
     #Temp git repo contains the Ansible Playbook - once deployed, this should be
     #deleted and cleaned up. This is a dirty method of minimizing resources.
