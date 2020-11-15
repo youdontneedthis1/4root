@@ -15,18 +15,21 @@
         - apt-transport-https
         - ca-certificates
         - curl
-        - gnupng-agent
+        - gnupg-agent
         - software-properties-common
        state: latest
+       become: yes
     - name: Add GPG Key
       apt_key:
        url: https://download.docker.com/linux/ubuntu/gpg
        state: present
+      become: yes
 
     - name: Add Docker Repository
       apt_repository:
        repo: deb https://download.docker.com/linux/ubuntu/gpg 
        state: present
+      become: yes
 
     - name: Install Docker
       apt:
