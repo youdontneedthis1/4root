@@ -1,7 +1,8 @@
 ---
 - name: WebServer Deployments
-  hosts: <enter ansible client hostname/IP>
-  remote_user: <remote user account>
+  hosts: ansibleclient
+  remote_user: ansibleclient
+  ansible_python_interpreter=/usr/bin/python3
 
   tasks:
     - name: Perform Updates
@@ -17,24 +18,26 @@
         - curl
         - gnupg-agent
         - software-properties-common
+        - python3
        state: latest
       become: yes
-    - name: Add GPG Key
-      apt_key:
-       url: https://download.docker.com/linux/ubuntu/gpg
-       state: present
-      become: yes
 
-    - name: Add Docker Repository
-      apt_repository:
-       repo: deb https://download.docker.com/linux/ubuntu/gpg 
-       state: present
-      become: yes
+    # - name: Add GPG Key
+    #   apt_key:
+    #    url: https://download.docker.com/linux/ubuntu/gpg
+    #    state: present
+    #   become: yes
+
+    # - name: Add Docker Repository
+    #   apt_repository:
+    #    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu/dists/focal $(lsb_release -cs) stable"
+    #    state: present
+    #   become: yes
 
     - name: Install Docker
       apt:
        name:
-        - docker
+        - docker.io
         - docker-compose
 
     - name: Create Docker files/environment
