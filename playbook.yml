@@ -35,14 +35,21 @@
         - docker.io
         - docker-compose
 
-    #Pull copy of git project and start docker
-    #Once compose is done, set the restart policy and cleanup.
     - name: Create Docker files/environment
       git:
         repo: 'https://github.com/youdontneedthis1/4root.git'
-      shell: |
-       docker-compose up -f /Docker/docker-compose.yml -p RootDevs
-       docker update --restart unless-stopped ruby_web
-      file:
-        path: ./playbook.yml
-        state: absent
+
+    #Docker update is here because we used a compose file but want the option
+    #to deploy into swarm. Unless deployed in swarm compose file config
+    #doesn't apply. See - https://docs.docker.com/compose/compose-file/#deploy
+    - name: Launch Docker
+        shell: |
+         docker-compose up -f /Docker/docker-compose.yml -p RootDevs
+         docker update --restart unless-stopped ruby_web
+
+    #Temp git repo contains the Ansible Playbook - once deployed, this should be
+    #deleted and cleaned up. This is a dirty method of minimizing resources.
+    - name: Cleanup environment     
+        file:
+          path: ./playbook.yml
+          state: absent
