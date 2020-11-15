@@ -2,14 +2,13 @@
 - name: WebServer Deployments
   hosts: ansibleclient
   remote_user: ansibleclient
-  ansible_python_interpreter=/usr/bin/python3
+  become: true
 
   tasks:
     - name: Perform Updates
       apt:
        upgrade: yes
        update_cache: yes
-      become: yes
     - name: Install Pre-reqs
       apt:
        name:
@@ -20,7 +19,6 @@
         - software-properties-common
         - python3
        state: latest
-      become: yes
 
     # - name: Add GPG Key
     #   apt_key:
@@ -46,3 +44,4 @@
        cd /Docker/
        git clone https://github.com/youdontneedthis1/4root.git
        docker-compose up
+
