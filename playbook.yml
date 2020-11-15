@@ -35,6 +35,11 @@
         - docker.io
         - docker-compose
 
+    - name: Make sure Docker Starts
+      service:
+        name: docker
+        state: started
+
     - name: Cleanup environment     
       file:
         path: /Project/
