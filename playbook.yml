@@ -56,8 +56,8 @@
     - name: Launch Docker
       command: "{{ item }}"
       with_items:
-        - docker-compose up -f /Project/Docker/docker-compose.yml -p RootDevs
-        - docker update --restart unless-stopped ruby_web
+        - sudo docker-compose -f /Project/Docker/docker-compose.yml -p RootDevs up
+        - sudo docker update --restart unless-stopped ruby_web
 
     #Temp git repo contains the Ansible Playbook - once deployed, this should be
     #deleted and cleaned up. This is a dirty method of minimizing resources.
